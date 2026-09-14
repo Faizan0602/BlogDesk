@@ -4,3 +4,5 @@ __pycache__/
 venv/
 blog-frontend/node_modules/
 blog-frontend/dist/
+.neon
+node_modules/
