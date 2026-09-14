@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+venv/
+blog-frontend/node_modules/
+blog-frontend/dist/
