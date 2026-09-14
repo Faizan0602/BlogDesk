@@ -2,6 +2,7 @@ from jose import jwt,JWTError
 from datetime import datetime,timedelta,timezone
 from fastapi import HTTPException,Depends,status
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordRequestForm
 import bcrypt
 from config import JWT_ALGORITHM,JWT_EXPIRE_MINUTES,JWT_SECRET_KEY
 

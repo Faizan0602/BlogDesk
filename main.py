@@ -6,7 +6,7 @@ import models,schemas
 from auth import create_token,hash_password,verify_password,verify_token
 from fastapi.middleware.cors import CORSMiddleware
 from config import CORS_ORIGINS
-
+from fastapi.security import OAuth2PasswordRequestForm
 models.Base.metadata.create_all(bind=engine)
 
 
@@ -98,21 +98,34 @@ def register(user:schemas.UserCreate,db:Session=Depends(get_db)):
 
 
 #LOGIN API
-@app.post("/login",response_model=schemas.TokenResponse)
-def login(credentials:schemas.UserLogin,db:Session=Depends(get_db)):
-    user = db.query(models.User).filter(func.lower(models.User.username) == credentials.username.lower()).first()
+@app.post("/login", response_model=schemas.TokenResponse)
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    user = db.query(models.User).filter(
+        func.lower(models.User.username) == form_data.username.lower()
+    ).first()
 
-    if not user or not verify_password(credentials.password,user.hashed_password):
+    if not user or not verify_password(
+        form_data.password,
+        user.hashed_password
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="INVALID USERNAME OR PASSWORD"
         )
 
-    token = create_token({"sub":str(user.id),"username":user.username})
+    token = create_token(
+        {
+            "sub": str(user.id),
+            "username": user.username
+        }
+    )
 
-    return{
-        "access_token":token,
-        "token_type":"bearer"
+    return {
+        "access_token": token,
+        "token_type": "bearer"
     }
 
 
