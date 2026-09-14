@@ -3,7 +3,7 @@ import axios from "axios";
 const TOKEN_KEY = "access_token";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://blogdesk-obpj.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
