@@ -34,3 +34,7 @@ CORS_ORIGINS = list(dict.fromkeys([
     *configured_cors_origins,
     "https://blog-desk-665lvskce-faizans-projects-b9246ece.vercel.app",
 ]))
+CORS_ORIGIN_REGEX = os.getenv(
+    "CORS_ORIGIN_REGEX",
+    r"^https://blog-desk-[a-z0-9-]+-faizans-projects-b9246ece\.vercel\.app$",
+)

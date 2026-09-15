@@ -5,7 +5,7 @@ from database import engine,SessionLocal
 import models,schemas
 from auth import create_token,hash_password,verify_password,verify_token
 from fastapi.middleware.cors import CORSMiddleware
-from config import CORS_ORIGINS
+from config import CORS_ORIGIN_REGEX, CORS_ORIGINS
 from fastapi.security import OAuth2PasswordRequestForm
 models.Base.metadata.create_all(bind=engine)
 
@@ -31,6 +31,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
+    allow_origin_regex=CORS_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

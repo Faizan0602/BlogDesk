@@ -58,7 +58,15 @@ function AuthProvider({ children }) {
   }, [token]);
 
   const login = async (credentials) => {
-    const response = await api.post("/login", credentials);
+    const formData = new URLSearchParams({
+      username: credentials.username,
+      password: credentials.password,
+    });
+    const response = await api.post("/login", formData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
     const accessToken = response.data?.access_token;
 
     if (!accessToken) {
