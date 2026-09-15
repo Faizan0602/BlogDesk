@@ -24,8 +24,13 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-this-development-secret")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "30"))
-CORS_ORIGINS = [
+configured_cors_origins = [
     origin.strip()
     for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
     if origin.strip()
 ]
+
+CORS_ORIGINS = list(dict.fromkeys([
+    *configured_cors_origins,
+    "https://blog-desk-665lvskce-faizans-projects-b9246ece.vercel.app",
+]))
