@@ -172,7 +172,7 @@ def get_blogs(page:int =1,
               search:str=Query(default=""),
               db:Session=Depends(get_db),
               user:models.User=Depends(get_current_user)):
-    query=db.query(models.Blog)
+    query=db.query(models.Blog).filter(models.Blog.user_id == user.id)
     
     #SEARCH LOGIC
     if search:
@@ -193,7 +193,10 @@ def get_blogs(page:int =1,
 #READ BLOGS BASED ON ID 
 @app.get("/blogs/{id}",response_model=schemas.BlogResponse)
 def get_blog(id:int,db:Session=Depends(get_db),user:models.User=Depends(get_current_user)):
-    blog=db.query(models.Blog).filter(models.Blog.id==id).first()
+    blog=db.query(models.Blog).filter(
+        models.Blog.id == id,
+        models.Blog.user_id == user.id,
+    ).first()
     
     if not blog:
         raise HTTPException(
