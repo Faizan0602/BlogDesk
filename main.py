@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Depends,HTTPException,Query,status
+from fastapi import FastAPI,Depends,HTTPException,Query,Request,status
 from sqlalchemy import func, inspect, text
 from sqlalchemy.orm import Session
 from database import engine,SessionLocal
@@ -6,7 +6,6 @@ import models,schemas
 from auth import create_token,hash_password,verify_password,verify_token
 from fastapi.middleware.cors import CORSMiddleware
 from config import CORS_ORIGIN_REGEX, CORS_ORIGINS
-from fastapi.security import OAuth2PasswordRequestForm
 models.Base.metadata.create_all(bind=engine)
 
 
@@ -100,16 +99,27 @@ def register(user:schemas.UserCreate,db:Session=Depends(get_db)):
 
 #LOGIN API
 @app.post("/login", response_model=schemas.TokenResponse)
-def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db)
-):
+async def login(request: Request, db: Session = Depends(get_db)):
+    if request.headers.get("content-type", "").startswith("application/json"):
+        credentials = await request.json()
+    else:
+        credentials = await request.form()
+
+    username = credentials.get("username")
+    password = credentials.get("password")
+
+    if not username or not password:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="USERNAME AND PASSWORD ARE REQUIRED"
+        )
+
     user = db.query(models.User).filter(
-        func.lower(models.User.username) == form_data.username.lower()
+        func.lower(models.User.username) == username.lower()
     ).first()
 
     if not user or not verify_password(
-        form_data.password,
+        password,
         user.hashed_password
     ):
         raise HTTPException(
