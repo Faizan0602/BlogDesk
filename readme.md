@@ -88,7 +88,7 @@ JWT token is generated after successful login.
 
 ## 3️⃣ Dashboard
 
-![Dashboard](screenshots/dashboard(2).png)
+![Dashboard](screenshots/board.png)
 
 Displays all available blogs with pagination and search functionality.
 
