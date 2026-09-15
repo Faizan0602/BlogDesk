@@ -1,4 +1,4 @@
-# 📝 BlogDesk API
+# 📝 BlogDesk 
 
 A full-stack Blog Management Application built with **FastAPI**, **PostgreSQL (Neon)**, **JWT Authentication**, **SQLAlchemy**, **Render**, and **Vercel**.
 
